@@ -7,6 +7,11 @@ class GitlabRunner < Formula
 
   depends_on "go" => :build
 
+  bottle do
+    cellar :any_skip_relocation
+    sha256 "853dc847c95a7c0013cdec4e07b6b5cafbe5fac7ec72bb6a1bed6cdae0b6ebcc" => :el_capitan
+  end
+
   def install
     ENV["GOPATH"] = buildpath
 
