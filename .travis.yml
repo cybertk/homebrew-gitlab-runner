@@ -1,6 +1,7 @@
 language: objective-c
 before_script:
 - brew update
+- brew upgrade brew-cask
 script:
 - make
 notifications:
