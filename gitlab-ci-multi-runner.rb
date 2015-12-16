@@ -37,5 +37,6 @@ class GitlabCiMultiRunner < Formula
 
   test do
     assert_match /gitlab-ci-multi-runner version #{version}/, shell_output("gitlab-ci-multi-runner --version")
+    assert_match /gitlab-runner version #{version}/, shell_output("gitlab-runner --version")
   end
 end
