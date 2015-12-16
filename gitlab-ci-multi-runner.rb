@@ -7,6 +7,13 @@ class GitlabCiMultiRunner < Formula
 
   head "https://gitlab.com/gitlab-org/gitlab-ci-multi-runner.git"
 
+  bottle do
+    cellar :any_skip_relocation
+    sha256 "5ec8bce6be01aa22a2efafe18c091a397914e6ef500df33d82e4b76f658a8fbe" => :el_capitan
+    sha256 "985fb658f94d106a335e1b11e085e2606e3d6c5a0de9efac9fabda36eaccc497" => :yosemite
+    sha256 "6456a87e5091b8c8f44d260e56dbf5e8e8783a060f59dba83bbb7a06f007ee45" => :mavericks
+  end
+
   depends_on "go" => :build
 
   def install
@@ -24,6 +31,7 @@ class GitlabCiMultiRunner < Formula
       # Copy from Makefile
       system "go", "build", "-o", "gitlab-ci-multi-runner", "-ldflags", "-X main.NAME=gitlab-ci-multi-runner -X main.VERSION=#{version} -X main.REVISION=#{commit_sha}"
       bin.install "gitlab-ci-multi-runner"
+      bin.install_symlink "gitlab-ci-multi-runner" => "gitlab-runner"
     end
   end
 
