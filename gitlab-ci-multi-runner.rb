@@ -25,13 +25,17 @@ class GitlabCiMultiRunner < Formula
   end
 
   def install
-    ENV["GOPATH"] = buildpath
-
     mkdir_p buildpath/"src/gitlab.com/gitlab-org"
     ln_sf buildpath, buildpath/"src/gitlab.com/gitlab-org/gitlab-ci-multi-runner"
 
+    ENV["GOPATH"] = buildpath
+
     ENV.prepend_create_path "PATH", buildpath/"bin"
     Language::Go.stage_deps resources, buildpath/"src"
+
+    cd buildpath/"src/github.com/jteeuwen/go-bindata/go-bindata" do
+      system "go", "install"
+    end
 
     # gitlab-ci-multi-runner's deps is managed by godeps
     ENV.append_path "GOPATH", "#{buildpath}/Godeps/_workspace"
