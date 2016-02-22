@@ -2,16 +2,17 @@ class GitlabCiMultiRunner < Formula
   desc "The official GitLab CI runner written in Go"
   homepage "https://gitlab.com/gitlab-org/gitlab-ci-multi-runner"
   url "https://gitlab.com/gitlab-org/gitlab-ci-multi-runner.git",
-    :tag => "v0.7.2",
-    :revision => "998cf5d5ef3caf6535cc4c5f3279b08c3ee2ecc8"
+    :tag => "v1.0.4",
+    :revision => "014aa8c265cc5d96e7359b6d55a8f8468b2959dc"
 
   head "https://gitlab.com/gitlab-org/gitlab-ci-multi-runner.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "5ec8bce6be01aa22a2efafe18c091a397914e6ef500df33d82e4b76f658a8fbe" => :el_capitan
-    sha256 "985fb658f94d106a335e1b11e085e2606e3d6c5a0de9efac9fabda36eaccc497" => :yosemite
-    sha256 "6456a87e5091b8c8f44d260e56dbf5e8e8783a060f59dba83bbb7a06f007ee45" => :mavericks
+    revision 1
+    sha256 "60ed30aa096a7306e13dc9a8d0d3f227a98947823125470175aee91e8cf600bd" => :el_capitan
+    sha256 "5afef9708d4d728589583e2217a8a5679d3f00f99c3e80661478daf712551933" => :yosemite
+    sha256 "455097004bb8c7b46ca4dad64634cdc60085a0f9c54dcfeab19802c2f5486cb3" => :mavericks
   end
 
   depends_on "go" => :build
@@ -29,6 +30,7 @@ class GitlabCiMultiRunner < Formula
       commit_sha = `git rev-parse --short HEAD`
 
       # Copy from Makefile
+      system "make", "executors/docker/bindata.go"
       system "go", "build", "-o", "gitlab-ci-multi-runner", "-ldflags", "-X main.NAME=gitlab-ci-multi-runner -X main.VERSION=#{version} -X main.REVISION=#{commit_sha}"
       bin.install "gitlab-ci-multi-runner"
       bin.install_symlink "#{bin}/gitlab-ci-multi-runner" => "gitlab-runner"
@@ -36,7 +38,7 @@ class GitlabCiMultiRunner < Formula
   end
 
   test do
-    assert_match /gitlab-ci-multi-runner version #{version}/, shell_output("gitlab-ci-multi-runner --version")
-    assert_match /gitlab-runner version #{version}/, shell_output("gitlab-runner --version")
+    assert_match "gitlab-ci-multi-runner version #{version}", shell_output("#{bin}/gitlab-ci-multi-runner --version")
+    assert_match "gitlab-runner version #{version}", shell_output("#{bin}/gitlab-runner --version")
   end
 end
