@@ -28,7 +28,9 @@ class GitlabCiMultiRunner < Formula
     mkdir_p buildpath/"src/gitlab.com/gitlab-org"
     ln_sf buildpath, buildpath/"src/gitlab.com/gitlab-org/gitlab-ci-multi-runner"
 
-    ENV["GOPATH"] = buildpath
+    # gitlab-ci-multi-runner's deps is managed by godeps
+    ENV["GOPATH"] = "#{buildpath}/Godeps/_workspace"
+    ENV.append_path "GOPATH", buildpath
 
     ENV.prepend_create_path "PATH", buildpath/"bin"
     Language::Go.stage_deps resources, buildpath/"src"
@@ -37,14 +39,11 @@ class GitlabCiMultiRunner < Formula
       system "go", "install"
     end
 
-    # gitlab-ci-multi-runner's deps is managed by godeps
-    ENV.append_path "GOPATH", "#{buildpath}/Godeps/_workspace"
 
     cd "src/gitlab.com/gitlab-org/gitlab-ci-multi-runner" do
       commit_sha = `git rev-parse --short HEAD`
 
       # Copy from Makefile
-      system "go-bindata", "-version"
       system "make", "executors/docker/bindata.go"
       system "go", "build", "-o", "gitlab-ci-multi-runner", "-ldflags", "-X main.NAME=gitlab-ci-multi-runner -X main.VERSION=#{version} -X main.REVISION=#{commit_sha}"
       bin.install "gitlab-ci-multi-runner"
