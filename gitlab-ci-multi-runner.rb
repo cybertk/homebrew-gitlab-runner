@@ -21,7 +21,7 @@ class GitlabCiMultiRunner < Formula
 
   go_resource "github.com/jteeuwen/go-bindata" do
     url "https://github.com/jteeuwen/go-bindata.git",
-      :revision => "1c1928d3b62dc79f5b35c32ae372a5fe69e9b4f1" # v3.0.5
+      :revision => "a0ff2567cfb70903282db057e799fd826784d41d" # v3.1.0
   end
 
   def install
@@ -44,6 +44,7 @@ class GitlabCiMultiRunner < Formula
       commit_sha = `git rev-parse --short HEAD`
 
       # Copy from Makefile
+      system "go-bindata", "-version"
       system "make", "executors/docker/bindata.go"
       system "go", "build", "-o", "gitlab-ci-multi-runner", "-ldflags", "-X main.NAME=gitlab-ci-multi-runner -X main.VERSION=#{version} -X main.REVISION=#{commit_sha}"
       bin.install "gitlab-ci-multi-runner"
