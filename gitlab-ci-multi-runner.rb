@@ -17,7 +17,7 @@ class GitlabCiMultiRunner < Formula
     sha256 "455097004bb8c7b46ca4dad64634cdc60085a0f9c54dcfeab19802c2f5486cb3" => :mavericks
   end
 
-  depends_on "go" => :build
+  depends_on "go15" => :build
 
   go_resource "github.com/jteeuwen/go-bindata" do
     url "https://github.com/jteeuwen/go-bindata.git",
