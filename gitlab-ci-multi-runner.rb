@@ -42,7 +42,7 @@ class GitlabCiMultiRunner < Formula
       commit_sha = `git rev-parse --short HEAD`
 
       # Disable vender support for go 1.5 and above
-      system "mv", "vendor", "vendor.disable"
+      mv "vendor", "vendor.disable"
 
       # Copy from Makefile
       system "make", "executors/docker/bindata.go"
