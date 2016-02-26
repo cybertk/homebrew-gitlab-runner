@@ -17,7 +17,8 @@ class GitlabCiMultiRunner < Formula
     sha256 "455097004bb8c7b46ca4dad64634cdc60085a0f9c54dcfeab19802c2f5486cb3" => :mavericks
   end
 
-  depends_on "go15" => :build
+  depends_on "go" => :build
+  depends_on "godep" => :build
 
   go_resource "github.com/jteeuwen/go-bindata" do
     url "https://github.com/jteeuwen/go-bindata.git",
@@ -43,7 +44,7 @@ class GitlabCiMultiRunner < Formula
 
       # Copy from Makefile
       system "make", "executors/docker/bindata.go"
-      system "go", "build", "-o", "gitlab-ci-multi-runner", "-ldflags", "-X main.NAME=gitlab-ci-multi-runner -X main.VERSION=#{version} -X main.REVISION=#{commit_sha}"
+      system "godep", "go", "build", "-o", "gitlab-ci-multi-runner", "-ldflags", "-X main.NAME=gitlab-ci-multi-runner -X main.VERSION=#{version} -X main.REVISION=#{commit_sha}"
       bin.install "gitlab-ci-multi-runner"
       bin.install_symlink "#{bin}/gitlab-ci-multi-runner" => "gitlab-runner"
     end
