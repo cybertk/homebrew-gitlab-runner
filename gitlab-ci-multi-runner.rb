@@ -38,13 +38,14 @@ class GitlabCiMultiRunner < Formula
       system "go", "install"
     end
 
-
     cd "src/gitlab.com/gitlab-org/gitlab-ci-multi-runner" do
       commit_sha = `git rev-parse --short HEAD`
 
+      # Disable vender support for go 1.5 and above
+      system "mv", "vendor", "vendor.disable"
+
       # Copy from Makefile
       system "make", "executors/docker/bindata.go"
-      system "mv", "vendor", "vendor.disable"
       system "godep", "go", "build", "-o", "gitlab-ci-multi-runner", "-ldflags", "-X main.NAME=gitlab-ci-multi-runner -X main.VERSION=#{version} -X main.REVISION=#{commit_sha}"
       bin.install "gitlab-ci-multi-runner"
       bin.install_symlink "#{bin}/gitlab-ci-multi-runner" => "gitlab-runner"
