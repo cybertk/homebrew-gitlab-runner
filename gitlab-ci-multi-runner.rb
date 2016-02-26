@@ -28,7 +28,9 @@ class GitlabCiMultiRunner < Formula
     mkdir_p buildpath/"src/gitlab.com/gitlab-org"
     ln_sf buildpath, buildpath/"src/gitlab.com/gitlab-org/gitlab-ci-multi-runner"
 
-    ENV["GOPATH"] = buildpath
+    # gitlab-ci-multi-runner's deps is managed by godeps
+    ENV["GOPATH"] = "#{buildpath}/Godeps/_workspace"
+    ENV.append_path "GOPATH", buildpath
 
     ENV.prepend_create_path "PATH", buildpath/"bin"
     Language::Go.stage_deps resources, buildpath/"src"
