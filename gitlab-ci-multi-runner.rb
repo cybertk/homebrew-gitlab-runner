@@ -22,7 +22,7 @@ class GitlabCiMultiRunner < Formula
 
   go_resource "github.com/jteeuwen/go-bindata" do
     url "https://github.com/jteeuwen/go-bindata.git",
-      :revision => "a0ff2567cfb70903282db057e799fd826784d41d" # v3.1.0
+      :revision => "a0ff2567cfb70903282db057e799fd826784d41d"
   end
 
   def install
@@ -42,7 +42,7 @@ class GitlabCiMultiRunner < Formula
       commit_sha = `git rev-parse --short HEAD`
 
       # Disable vender support for go 1.5 and above
-      mv "vendor", "vendor.disable"
+      ENV["GO15VENDOREXPERIMENT"] = "0"
 
       # Copy from Makefile
       system "make", "executors/docker/bindata.go"
