@@ -25,6 +25,11 @@ class GitlabCiMultiRunner < Formula
       :revision => "a0ff2567cfb70903282db057e799fd826784d41d"
   end
 
+  resource "prebuilt.tar.gz" do
+    url "https://gitlab-ci-multi-runner-downloads.s3.amazonaws.com/v1.0.4/docker/prebuilt.tar.gz"
+    sha256 "43dedd023672990e27289e97bf74f493576956418148f6227917b8511e8aadfd"
+  end
+
   def install
     mkdir_p buildpath/"src/gitlab.com/gitlab-org"
     ln_sf buildpath, buildpath/"src/gitlab.com/gitlab-org/gitlab-ci-multi-runner"
@@ -38,6 +43,10 @@ class GitlabCiMultiRunner < Formula
       system "go", "install"
     end
 
+    resource("prebuilt.tar.gz").stage do
+      system "go-bindata", "-pkg", "docker", "-nocompress", "-nomemcopy", "-nometadata", "-o", "executors/docker/bindata.go", "prebuilt.tar.gz"
+    end
+
     cd "src/gitlab.com/gitlab-org/gitlab-ci-multi-runner" do
       commit_sha = `git rev-parse --short HEAD`
 
@@ -45,7 +54,6 @@ class GitlabCiMultiRunner < Formula
       ENV["GO15VENDOREXPERIMENT"] = "0"
 
       # Copy from Makefile
-      system "make", "executors/docker/bindata.go"
       system "godep", "go", "build", "-o", "gitlab-ci-multi-runner", "-ldflags", "-X main.NAME=gitlab-ci-multi-runner -X main.VERSION=#{version} -X main.REVISION=#{commit_sha}"
       bin.install "gitlab-ci-multi-runner"
       bin.install_symlink "#{bin}/gitlab-ci-multi-runner" => "gitlab-runner"
