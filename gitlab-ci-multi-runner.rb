@@ -51,7 +51,7 @@ class GitlabCiMultiRunner < Formula
     cd "src/gitlab.com/gitlab-org/gitlab-ci-multi-runner" do
       commit_sha = `git rev-parse --short HEAD`
 
-      # Disable vender support for go 1.5 and above
+      # Disable vendor support for go 1.5 and above
       ENV["GO15VENDOREXPERIMENT"] = "0"
 
       # Copy from Makefile
