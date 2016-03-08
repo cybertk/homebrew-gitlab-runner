@@ -19,6 +19,7 @@ class GitlabCiMultiRunner < Formula
 
   depends_on "go" => :build
   depends_on "godep" => :build
+  depends_on "docker" => :recommended
 
   go_resource "github.com/jteeuwen/go-bindata" do
     url "https://github.com/jteeuwen/go-bindata.git",
