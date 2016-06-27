@@ -9,7 +9,7 @@
 Install the cutting edge version with
 
 ```
-brew install https://raw.githubusercontent.com/cybertk/homebrew-gitlab-runner/master/gitlab-runner.rb
+brew install cybertk/gitlab-runner/gitlab-ci-multi-runner
 ```
 
 [gitlab-ci-multi-runner]: https://gitlab.com/gitlab-org/gitlab-ci-multi-runner
